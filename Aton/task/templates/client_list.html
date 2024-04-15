@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Список клиентов{% endblock %}
+
+
+{% block content %}
+    <h2>Список клиентов</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Номер Счета</th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Дата Рождения</th>
+                <th>ИНН</th>
+                <th>ФИО ответственного</th>
+                <th>Статус</th>
+                <th>Изменить статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client.acc_num }}</td>
+                <td>{{ client.fam }}</td>
+                <td>{{ client.name }}</td>
+                <td>{{ client.otc }}</td>
+                <td>{{ client.birth_date }}</td>
+                <td>{{ client.inn }}</td>
+                <td>{{ client.respons.userprofile.first_name }} {{ client.respons.userprofile.last_name }} {{ client.respons.userprofile.middle_name }}</td>
+                <td>{{ client.status }}</td>
+                <td>
+                    <form method="post" action="{% url 'change_status' client.id %}">
+                        {% csrf_token %}
+                        <select name="status">
+                            <option value="Не в работе">Не в работе</option>
+                            <option value="В работе">В работе</option>
+                            <option value="Отказ">Отказ</option>
+                            <option value="Сделка закрыта">Сделка закрыта</option>
+                        </select>
+                        <button type="submit">Применить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
